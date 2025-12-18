@@ -94,29 +94,29 @@ function Form() {
 ```
 ### Issues in this component
 
-```jsx
-    const [error, setError] = React.useState(false);
-```
-    - Using a boolean means you can only show one type of error. It’s better to store a string message so you can display different errors to the user.
+    ```jsx
+        const [error, setError] = React.useState(false);
+    ```
+    Using a boolean means you can only show one type of error. It’s better to store a string message so you can display different errors to the user.
 
-```jsx
-    fetch("/api/submit", ...);
+    ```jsx
+        fetch("/api/submit", ...);
+    ```
+    Right now, if the request fails, nothing handles the error. We should wrap it in try/catch or use .then/.catch so failures are handled gracefully.
+    
 
-Right now, if the request fails, nothing handles the error. We should wrap it in try/catch or use .then/.catch so failures are handled gracefully.
-```
+    ```jsx
+        fetch("/api/submit", {
+            method: "POST",
+            body: JSON.stringify({ value }),
+        });
+    ```
+    Since there’s no await or .then, the code doesn’t wait for the server response and ignores any errors. This can lead to failed submissions without user feedback.
 
-```jsx
-    fetch("/api/submit", {
-    method: "POST",
-    body: JSON.stringify({ value }),
-  });
-```
-Since there’s no await or .then, the code doesn’t wait for the server response and ignores any errors. This can lead to failed submissions without user feedback.
-
-```jsx
-    <input onChange={(e) => setValue(e.target.value)} />
-    <span style={{ color: "red" }} />
-```
+    ```jsx
+        <input onChange={(e) => setValue(e.target.value)} />
+        <span style={{ color: "red" }} />
+    ```
     - Inline functions and styles recreate every render. Move them outside or use className for styles.
     - <input> has no label, which is bad for screen readers. 
     - <button> lacks type="button".
