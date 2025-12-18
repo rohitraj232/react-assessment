@@ -102,7 +102,7 @@ function Form() {
 ```jsx
     fetch("/api/submit", ...);
 
-    - Right now, if the request fails, nothing handles the error. We should wrap it in try/catch or use .then/.catch so failures are handled gracefully.
+Right now, if the request fails, nothing handles the error. We should wrap it in try/catch or use .then/.catch so failures are handled gracefully.
 ```
 
 ```jsx
@@ -111,7 +111,7 @@ function Form() {
     body: JSON.stringify({ value }),
   });
 ```
-    - Since there’s no await or .then, the code doesn’t wait for the server response and ignores any errors. This can lead to failed submissions without user feedback.
+Since there’s no await or .then, the code doesn’t wait for the server response and ignores any errors. This can lead to failed submissions without user feedback.
 
 ```jsx
     <input onChange={(e) => setValue(e.target.value)} />
