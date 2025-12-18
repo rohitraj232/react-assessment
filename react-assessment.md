@@ -12,16 +12,16 @@
 
     ```ts
     type User = {
-    id: number;
-    name: string;
-    email: string;
+        id: number;
+        name: string;
+        email: string;
     };
     ```
 
     **mapped types**  
     ```ts
     type ReadonlyOptional<T> = {
-    readonly [K in keyof T]?: T[K];
+        readonly [K in keyof T]?: T[K];
     };
 
     type UserTransformed = ReadonlyOptional<User>;
@@ -30,7 +30,7 @@
     **conditional types**  
     ```ts
     type ReadonlyOptionalString<T> = {
-    readonly [K in keyof T]: T[K] extends string ? T[K] | undefined : T[K];
+        readonly [K in keyof T]: T[K] extends string ? T[K] | undefined : T[K];
     };
 
     type UserStringTransformed = ReadonlyOptionalString<User>;
@@ -94,33 +94,32 @@ function Form() {
 ```
 ### Issues in this component
 
-    ```jsx
-        const [error, setError] = React.useState(false);
-    ```
-    Using a boolean means you can only show one type of error. It’s better to store a string message so you can display different errors to the user.
+```jsx
+    const [error, setError] = React.useState(false);
+```
+Using a boolean means you can only show one type of error. It’s better to store a string message so you can display different errors to the user.
 
-    ```jsx
-        fetch("/api/submit", ...);
-    ```
-    Right now, if the request fails, nothing handles the error. We should wrap it in try/catch or use .then/.catch so failures are handled gracefully.
-    
+```jsx
+    fetch("/api/submit", ...);
+```
+Right now, if the request fails, nothing handles the error. We should wrap it in try/catch or use .then/.catch so failures are handled gracefully.
 
-    ```jsx
-        fetch("/api/submit", {
-            method: "POST",
-            body: JSON.stringify({ value }),
-        });
-    ```
-    Since there’s no await or .then, the code doesn’t wait for the server response and ignores any errors. This can lead to failed submissions without user feedback.
+```jsx
+    fetch("/api/submit", {
+        method: "POST",
+        body: JSON.stringify({ value }),
+    });
+```
+Since there’s no await or .then, the code doesn’t wait for the server response and ignores any errors. This can lead to failed submissions without user feedback.
 
-    ```jsx
-        <input onChange={(e) => setValue(e.target.value)} />
-        <span style={{ color: "red" }} />
-    ```
-    - Inline functions and styles recreate every render. Move them outside or use className for styles.
-    - <input> has no label, which is bad for screen readers. 
-    - <button> lacks type="button".
-    - Not using <form> element.
+```jsx
+    <input onChange={(e) => setValue(e.target.value)} />
+    <span style={{ color: "red" }} />
+```
+- Inline functions and styles recreate every render. Move them outside or use className for styles.
+- <input> has no label, which is bad for screen readers. 
+- <button> lacks type="button".
+- Not using <form> element.
 
 
 
@@ -183,22 +182,22 @@ function UserProfile({ userId }: { userId: string }) {
 ```ts
     const [data, setData] = React.useState<any>(null);
 ```
-    - Using any removes type safety, making it easy to runtime errors.
+Using any removes type safety, making it easy to runtime errors.
 
 ```jsx
     fetch(`/api/user/${userId}`)
     .then((res) => res.json())
     .then(setData);
 ```
-    If the network request fails or the server returns an error, the component will break silently. The user will only see the “Loading…” message and won’t know anything went wrong.
+If the network request fails or the server returns an error, the component will break silently. The user will only see the “Loading…” message and won’t know anything went wrong.
 
 ```jsx
-if (!data) return <div>Loading...</div>;
+    if (!data) return <div>Loading...</div>;
 ```
-    - Uses data being null to indicate loading. If the fetch fails and data never arrives, the loading state never ends.
+Uses data being null to indicate loading. If the fetch fails and data never arrives, the loading state never ends.
 
 
-    - If the fetch fails, the user has no way to retry the request. No timeout or cancellation logic could leak memory if userId changes quickly.
+If the fetch fails, the user has no way to retry the request. No timeout or cancellation logic could leak memory if userId changes quickly.
 
 
 
