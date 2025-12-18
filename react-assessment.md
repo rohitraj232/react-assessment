@@ -101,9 +101,9 @@ function Form() {
 
 ```jsx
     fetch("/api/submit", ...);
-```
-    - Right now, if the request fails, nothing handles the error. We should wrap it in try/catch or use .then/.catch so failures are handled gracefully.
 
+    - Right now, if the request fails, nothing handles the error. We should wrap it in try/catch or use .then/.catch so failures are handled gracefully.
+```
 
 ```jsx
     fetch("/api/submit", {
