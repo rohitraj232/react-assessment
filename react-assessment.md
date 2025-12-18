@@ -190,8 +190,7 @@ function UserProfile({ userId }: { userId: string }) {
     .then((res) => res.json())
     .then(setData);
 ```
-
-    - If the network request fails or the server returns an error, the component will break silently. The user will only see the “Loading…” message and won’t know anything went wrong.
+    If the network request fails or the server returns an error, the component will break silently. The user will only see the “Loading…” message and won’t know anything went wrong.
 
 ```jsx
 if (!data) return <div>Loading...</div>;
