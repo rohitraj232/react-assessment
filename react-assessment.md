@@ -23,6 +23,7 @@
     type ReadonlyOptional<T> = {
     readonly [K in keyof T]?: T[K];
     };
+
     type UserTransformed = ReadonlyOptional<User>;
     ```
 
@@ -31,6 +32,7 @@
     type ReadonlyOptionalString<T> = {
     readonly [K in keyof T]: T[K] extends string ? T[K] | undefined : T[K];
     };
+
     type UserStringTransformed = ReadonlyOptionalString<User>;
     ```
 
@@ -90,22 +92,31 @@ function Form() {
   );
 }
 ```
-### Issues in the component
+### Issues in this component
 
-1. const [error, setError] = React.useState(false);
+```jsx
+    const [error, setError] = React.useState(false);
+```
     - Using a boolean means you can only show one type of error. It’s better to store a string message so you can display different errors to the user.
 
-2. fetch("/api/submit", ...);
+```jsx
+    fetch("/api/submit", ...);
+```
     - Right now, if the request fails, nothing handles the error. We should wrap it in try/catch or use .then/.catch so failures are handled gracefully.
 
-3. fetch("/api/submit", {
+
+```jsx
+    fetch("/api/submit", {
     method: "POST",
     body: JSON.stringify({ value }),
   });
+```
     - Since there’s no await or .then, the code doesn’t wait for the server response and ignores any errors. This can lead to failed submissions without user feedback.
 
-4. <input onChange={(e) => setValue(e.target.value)} />
-  <span style={{ color: "red" }} />
+```jsx
+    <input onChange={(e) => setValue(e.target.value)} />
+    <span style={{ color: "red" }} />
+```
     - Inline functions and styles recreate every render. Move them outside or use className for styles.
     - <input> has no label, which is bad for screen readers. 
     - <button> lacks type="button".
@@ -167,18 +178,27 @@ function UserProfile({ userId }: { userId: string }) {
 }
 ```
 
-1. const [data, setData] = React.useState<any>(null);
+## Issues in the current code
+
+```ts
+    const [data, setData] = React.useState<any>(null);
+```
     - Using any removes type safety, making it easy to runtime errors.
 
-2. fetch(`/api/user/${userId}`)
-  .then((res) => res.json())
-  .then(setData);
+```jsx
+    fetch(`/api/user/${userId}`)
+    .then((res) => res.json())
+    .then(setData);
+```
     - If the network request fails or the server returns an error, the component will break silently. The user will only see the “Loading…” message and won’t know anything went wrong.
 
-3. if (!data) return <div>Loading...</div>;
+```jsx
+if (!data) return <div>Loading...</div>;
+```
     - Uses data being null to indicate loading. If the fetch fails and data never arrives, the loading state never ends.
 
-4. If the fetch fails, the user has no way to retry the request. No timeout or cancellation logic could leak memory if userId changes quickly.
+
+    - If the fetch fails, the user has no way to retry the request. No timeout or cancellation logic could leak memory if userId changes quickly.
 
 
 
